@@ -1,0 +1,44 @@
+#!/bin/bash
+# Use this to pipe into or out of a temporary file, to conserve the output of a
+# command.
+#
+# When called with no arguments, `keep` will use the temporary file
+# "/tmp/keep${KEEP_ENV}", which will always be the same file unless the
+# `KEEP_ENV` environment variable is set explicitly. For users using multiple
+# terminals (e.g. with tmux), adding the following to .bashrc will give each
+# terminal a unique default keepfile:
+#
+#  export KEEP_ENV="$(tty | rev | cut -d/ -f1-1 | rev)"
+#
+# If an argument is provided, `keep` will use `/tmp/keep-$1` as its temporary
+# file, allowing for conserving multiple outputs and referencing them by name.
+# Note that `$KEEP_ENV` is not used if a specific `keepname` is provided, which
+# allows for convenient passing between separate terminals.
+#
+# Usage:
+#  someapp | keep     # Tee the output of a command into the default keepfile.
+#  someapp | keep 1   # Tee the output of a comamnd into the named keepfile '1'.
+#  keep               # Print the most recent contents of the default keepfile.
+#  keep | out         # Stream the most recently preserved input to `keep` to a
+#                     # command.
+#  keep 1 | out       # Stream the most recently preserved input to `keep 1` to
+#                     # a command.
+if [[ $# -eq 0 ]] ; then
+  file="/tmp/keep${KEEP_ENV}"
+elif [[ $# -eq 1 ]] ; then
+  if [[ $1 =~ ^[-_A-Za-z0-9]+$ ]] ; then
+    file="/tmp/keep-$1"
+  else
+    echo 'Invalid keepname: only letters, numbers, dashes, and underscores are allowed.' >&2
+    exit 1
+  fi
+else
+  echo 'Usage: keep [keepname]' >&2
+  exit 1
+fi
+if [[ -p /dev/stdin ]] ; then
+  # Input is a pipe
+  tee "$file"
+elif [[ -e $file ]] ; then
+  cat "$file"
+fi

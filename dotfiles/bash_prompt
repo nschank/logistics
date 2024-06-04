@@ -1,0 +1,55 @@
+#!/bin/bash
+# Sets up a function for use as the PROMPT_COMMAND in bash
+
+# $1: the color as given to setaf.
+__ps1_color() {
+  echo -ne "\x01$(tput setaf "$1")\x02"
+}
+
+# $1: name
+# $2: hostname
+# $3: bold color
+# $4: dim color
+__ps1_name_hostname() {
+  echo -n "$(__ps1_color $4)("
+  echo -n "$(__ps1_color $3)$1"
+  echo -n "$(__ps1_color $4)@"
+  echo -n "$(__ps1_color $3)$2"
+  echo -n "$(__ps1_color $4))"
+}
+
+# $1: command number
+# $2: num_color
+# $3: time_color
+# $4: data_color
+# $5: dim color
+__num_time_date() {
+  echo -n "$(__ps1_color $5)("
+  echo -n "$(__ps1_color $2)$1"
+  echo -n "$(__ps1_color $5)/"
+  echo -n "$(__ps1_color $3)$(date +%H\:%M)"
+  echo -n "$(__ps1_color $5)/"
+  echo -n "$(__ps1_color $4)$(date +%d-%b-%y)"
+  echo -n "$(__ps1_color $5))"
+}
+
+# $1: dollar sign color
+# $2: citc color
+# $3: bold dir color
+# $4: dim dir color
+# $5: dir color
+__wd() {
+  echo -n "$(__ps1_color $5)("
+  echo -n "$(__ps1_color $1)\$"
+  echo -n "$(__ps1_color $5):"
+  local citc_name
+  if citc_name=$(current_citc_client); then
+    echo -n "$(__ps1_color $2)$citc_name"
+    echo -n "$(__ps1_color $5):"
+    local citc_path=$(pwd | cut -d / -f-6 --complement)
+    echo -n "$(__ps1_color $3)$citc_path"
+  else
+    echo -n "$(__ps1_color $3)$(pwd)"
+  fi
+  echo -n "$(__ps1_color $5))"
+}

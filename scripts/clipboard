@@ -1,0 +1,18 @@
+#!/bin/bash
+# Utility for piping into/out of the clipboard. Examples:
+#
+# Paste to stdout:
+#  clipboard
+#
+# Run command and copy its output:
+#  cat file | clipboard
+#
+# Modify contents of clipboard in place:
+#  clipboard | sed 's/a/b/' | clipboard
+if [[ -p /dev/stdin ]] ; then
+  # stdin is a pipe: copy
+  xclip -i -selection clipboard
+else
+  # stdin is not a pipe: copy
+  xclip -o -selection clipboard
+fi
