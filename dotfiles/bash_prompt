@@ -23,7 +23,7 @@ __ps1_name_hostname() {
 # $3: time_color
 # $4: data_color
 # $5: dim color
-__num_time_date() {
+__ps1_num_time_date() {
   echo -n "$(__ps1_color $5)("
   echo -n "$(__ps1_color $2)$1"
   echo -n "$(__ps1_color $5)/"
@@ -33,23 +33,56 @@ __num_time_date() {
   echo -n "$(__ps1_color $5))"
 }
 
-# $1: dollar sign color
-# $2: citc color
-# $3: bold dir color
-# $4: dim dir color
-# $5: dir color
-__wd() {
-  echo -n "$(__ps1_color $5)("
-  echo -n "$(__ps1_color $1)\$"
-  echo -n "$(__ps1_color $5):"
-  local citc_name
-  if citc_name=$(current_citc_client); then
-    echo -n "$(__ps1_color $2)$citc_name"
-    echo -n "$(__ps1_color $5):"
-    local citc_path=$(pwd | cut -d / -f-6 --complement)
-    echo -n "$(__ps1_color $3)$citc_path"
-  else
-    echo -n "$(__ps1_color $3)$(pwd)"
+__ps1_prompt_command() {
+  local PREVIOUS_EXIT="$?"
+
+  local RESET_COLOR="\[\033[0m\]"
+  local DIM_CODE=8  # LIGHT GRAY
+  local SET_DIM="$(__ps1_color $DIM_CODE)"
+
+  local DOLLAR_CODE=12 # BOLD BLUE
+  local DOLLAR="$(__ps1_color $DOLLAR_CODE)\$$RESET_COLOR"
+
+  local EXIT_CODE=11  # YELLOW
+  local EXIT="$(__ps1_color $EXIT_CODE)$PREVIOUS_EXIT$RESET_COLOR"
+  
+  local WD_CODE=13  # BOLD MAGENTA
+  local WD="$(__ps1_color $WD_CODE)\\w$RESET_COLOR"
+
+  local HOSTNAME_CODE=10
+  local COUNT_CODE=12
+  local TIME_CODE=11
+  local DATE_CODE=100
+
+  local RAW_GIT_PS1="$(__git_ps1 "%s")"
+  local GIT_PS1=""
+  if ! [[ -z $RAW_GIT_PS1 ]] ; then
+    GIT_PS1="$SET_DIM-($(__ps1_color $WD_CODE)${RAW_GIT_PS1}$SET_DIM)$RESET_COLOR"
   fi
-  echo -n "$(__ps1_color $5))"
+
+  case $TERM in
+      xterm*|rxvt*)
+          local TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+          ;;
+      *)
+          local TITLEBAR=""
+          ;;
+  esac
+  PS1="$TITLEBAR\
+$SET_DIM--$(__ps1_name_hostname \\u \\h $HOSTNAME_CODE $DIM_CODE)\
+$SET_DIM-\
+$(__ps1_num_time_date \\# $COUNT_CODE $TIME_CODE $DATE_CODE $DIM_CODE)\
+$GIT_PS1\
+$SET_DIM-(\
+$EXIT\
+$SET_DIM)\
+$SET_DIM--\n\
+--(\
+$DOLLAR\
+$SET_DIM:\
+$WD\
+$SET_DIM)-- $RESET_COLOR"
+  PS2="$SET_DIM---$RESET_COLOR "
+  history -a
+  history -n
 }

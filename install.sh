@@ -31,7 +31,11 @@ done
 #  $2 - The location of the dotfile to use (e.g. 
 #       "$SCRIPT_PATH/dotfiles/bashrc").
 set_dotfile () {
-  if [[ -L $1 ]]; do
+  if [[ -L $1 ]] ; then
+    if [[ $2 == $(realpath "$1") ]] ; then
+      echo "$1 already installed correctly."
+      return 0
+    fi
     echo "Removing previous symbolic link at $1 (which pointed to $2)..."
     rm --force $1
   fi

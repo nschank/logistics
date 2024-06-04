@@ -116,7 +116,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
-
+if [[ -e ~/.bash_prompt && -e ~/.git_prompt.sh ]] ; then
+  source ~/.git_prompt.sh
+  source ~/.bash_prompt
+  export PROMPT_COMMAND="__ps1_prompt_command"
+fi
 
 export KEEP_ENV="$(tty | rev | cut -d/ -f1-1 | rev)"
 export PATH="$PATH:/home/nschank/.scripts"
