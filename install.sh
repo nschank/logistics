@@ -47,11 +47,7 @@ set_dotfile () {
   echo "Installing $1..."
   ln --symbolic --backup=numbered "$2" "$1"
 }
-
-set_dotfile ~/.bash_aliases "$SCRIPT_PATH/dotfiles/bash_aliases"
-set_dotfile ~/.bash_prompt "$SCRIPT_PATH/dotfiles/bash_prompt"
-set_dotfile ~/.bashrc "$SCRIPT_PATH/dotfiles/bashrc"
-set_dotfile ~/.git_prompt.sh "$SCRIPT_PATH/dotfiles/git_prompt.sh"
-set_dotfile ~/.tmux.conf "$SCRIPT_PATH/dotfiles/tmux.conf"
-set_dotfile ~/.vimrc "$SCRIPT_PATH/dotfiles/vimrc"
+for file in bash_aliases bash_prompt bashrc git_prompt.sh tmux.conf vimrc; do
+  set_dotfile ~/."$file" "$SCRIPT_PATH/dotfiles/$file"
+done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
