@@ -21,12 +21,12 @@ if [[ $SCRIPT_PATH != $(pwd) ]] ; then
 fi
 
 # Install any tools so we can use them below if needed.
-for tool in "$(cat tools)"; do
+for tool in $(cat tools); do
   echo "Installing $tool..."
   sudo apt-get install "$tool"
 done
 
-for tool in "$(cat tools_to_upgrade)"; do
+for tool in $(cat tools_to_upgrade); do
   echo "Updating $tool..."
   sudo apt-get upgrade "$tool"
 done
@@ -47,7 +47,7 @@ set_dotfile () {
   echo "Installing $1..."
   ln --symbolic --backup=numbered "$2" "$1"
 }
-for file in bash_aliases bash_prompt bashrc git_prompt.sh tmux.conf vimrc; do
+for file in $(ls dotfiles); do
   set_dotfile ~/."$file" "$SCRIPT_PATH/dotfiles/$file"
 done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
