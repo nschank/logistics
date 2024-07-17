@@ -41,6 +41,7 @@ __ps1_prompt_command() {
   local SET_DIM="$(__ps1_color $DIM_CODE)"
 
   local DOLLAR_CODE=12 # BOLD BLUE
+  local DOLLAR_COLOR="$(__ps1_color $DOLLAR_CODE)"
   local DOLLAR="$(__ps1_color $DOLLAR_CODE)\$$RESET_COLOR"
 
   local EXIT_CODE=11  # YELLOW
@@ -60,6 +61,9 @@ __ps1_prompt_command() {
     GIT_PS1="$SET_DIM-($(__ps1_color $WD_CODE)${RAW_GIT_PS1}$SET_DIM)$RESET_COLOR"
   fi
 
+  local VENV_COLOR="$(__ps1_color $TIME_CODE)"
+  local VENV="$VENV_COLOR$(echo "$VIRTUAL_ENV" | rev | cut -d'/' -f1 | rev)$RESET_COLOR"
+
   case $TERM in
       xterm*|rxvt*)
           local TITLEBAR='\[\033]0;\u@\h:\w\007\]'
@@ -77,8 +81,8 @@ $SET_DIM-(\
 $EXIT\
 $SET_DIM)\
 $SET_DIM--\n\
---(\
-$DOLLAR\
+$SET_DIM--(\
+$DOLLAR$VENV\
 $SET_DIM:\
 $WD\
 $SET_DIM)-- $RESET_COLOR"
