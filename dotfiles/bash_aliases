@@ -1,2 +1,3 @@
 #!/bin/bash
 alias whence="type -a"
+alias tmx="tmux new-session -A -s"
