@@ -123,4 +123,5 @@ if [[ -e ~/.bash_prompt && -e ~/.git_prompt.sh ]] ; then
 fi
 
 export KEEP_ENV="$(tty | rev | cut -d/ -f1-1 | rev)"
-export PATH="$PATH:/home/nschank/.scripts"
+export PATH="$PATH:/home/nschank/.scripts:/home/nschank/.cargo/bin"
+. "$HOME/.cargo/env"
