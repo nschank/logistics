@@ -52,5 +52,10 @@ for file in $(ls dotfiles); do
 done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
 
+# Install JJ
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 $HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
+alias jj="$HOME/.cargo/bin/jj"
+jj config set --user user.name "Nick Schank"
+jj config set --user user.email "nicolas.schank@google.com"
+source <(jj util completion bash)
