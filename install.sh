@@ -53,4 +53,4 @@ done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-cargo install --locked --bin jj jj-cli
+$HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
