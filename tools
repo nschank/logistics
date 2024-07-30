@@ -1,2 +1,6 @@
 tmux
 xclip
+libssl-dev
+openssl
+pkg-config
+build-essential
