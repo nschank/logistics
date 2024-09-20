@@ -59,3 +59,6 @@ alias jj="$HOME/.cargo/bin/jj"
 jj config set --user user.name "Nick Schank"
 jj config set --user user.email "nicolas.schank@google.com"
 source <(jj util completion bash)
+
+# Install pants
+curl --proto '=https' --tlsv1.2 -fsSL https://static.pantsbuild.org/setup/get-pants.sh | bash
