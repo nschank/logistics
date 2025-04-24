@@ -88,5 +88,4 @@ $WD\
 $SET_DIM)-- $RESET_COLOR"
   PS2="$SET_DIM---$RESET_COLOR "
   history -a
-  history -n
 }
