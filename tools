@@ -1,6 +1,9 @@
 tmux
+vim
 xclip
 libssl-dev
 openssl
 pkg-config
 build-essential
+curl
+wget

@@ -123,13 +123,15 @@ if [[ -e ~/.bash_prompt && -e ~/.git_prompt.sh ]] ; then
 fi
 
 export KEEP_ENV="$(tty | rev | cut -d/ -f1-1 | rev)"
-export PATH="$PATH:/home/nschank/.scripts:/home/nschank/.local/bin:/home/nschank/.cargo/bin"
+export PATH="$PATH:/home/nschank/.scripts:/home/nschank/.local/bin:/home/nschank/.cargo/bin:/home/nick/.scripts:/home/nick/.local/bin:/home/nick/.cargo/bin"
 . "$HOME/.cargo/env"
 
+source <(COMPLETE=bash jj)
+
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/nschank/google-cloud-sdk/path.bash.inc' ]; then . '/home/nschank/google-cloud-sdk/path.bash.inc'; fi
+if [ -f '/home/nick/google-cloud-sdk/path.bash.inc' ]; then . '/home/nick/google-cloud-sdk/path.bash.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/nschank/google-cloud-sdk/completion.bash.inc' ]; then . '/home/nschank/google-cloud-sdk/completion.bash.inc'; fi
+if [ -f '/home/nick/google-cloud-sdk/completion.bash.inc' ]; then . '/home/nick/google-cloud-sdk/completion.bash.inc'; fi
 
-source <(COMPLETE=bash jj)
+. "$HOME/snap/code/207/.local/share/../bin/env"
