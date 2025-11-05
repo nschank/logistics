@@ -2,9 +2,10 @@
 # Installs scripts, dotfiles, and other conveniences automatically. This script
 # must be run from this directory or behavior is undefined.
 #
-# This script is safe to run multiple times, and successful runs should be
-# idempotent.
+# This script is intended to be run inside a Docker container to set up a simple
+# environment, and must run non-interactively.
 
+set -x
 set -o errexit   # abort on nonzero exitstatus
 set -o nounset   # abort on unbound variable
 set -o pipefail  # don't hide errors within pipes
@@ -23,12 +24,12 @@ fi
 # Install any tools so we can use them below if needed.
 for tool in $(cat tools); do
   echo "Installing $tool..."
-  sudo apt-get install "$tool"
+  apt-get install -y --no-install-recommends "$tool"
 done
 
 for tool in $(cat tools_to_update); do
   echo "Updating $tool..."
-  sudo apt-get upgrade "$tool"
+  apt-get upgrade "$tool"
 done
 
 # Safely installs a dotfile.
@@ -54,11 +55,8 @@ set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
 
 # Install JJ
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-$HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
+$HOME/.cargo/bin/cargo install -y --locked --bin jj jj-cli
 alias jj="$HOME/.cargo/bin/jj"
 jj config set --user user.name "Nick Schank"
 jj config set --user user.email "nicolas.schank@google.com"
 source <(jj util completion bash)
-
-# Install pants
-curl --proto '=https' --tlsv1.2 -fsSL https://static.pantsbuild.org/setup/get-pants.sh | bash
