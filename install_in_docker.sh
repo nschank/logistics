@@ -21,6 +21,8 @@ if [[ $SCRIPT_PATH != $(pwd) ]] ; then
   exit 1
 fi
 
+apt-get update
+
 # Install any tools so we can use them below if needed.
 for tool in $(cat tools); do
   echo "Installing $tool..."
@@ -29,7 +31,7 @@ done
 
 for tool in $(cat tools_to_update); do
   echo "Updating $tool..."
-  apt-get upgrade "$tool"
+  apt-get upgrade -y "$tool"
 done
 
 # Safely installs a dotfile.
@@ -54,8 +56,8 @@ done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
 
 # Install JJ
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-$HOME/.cargo/bin/cargo install -y --locked --bin jj jj-cli
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+$HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
 alias jj="$HOME/.cargo/bin/jj"
 jj config set --user user.name "Nick Schank"
 jj config set --user user.email "nicolas.schank@google.com"
