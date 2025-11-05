@@ -58,7 +58,6 @@ set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
 # Install JJ
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 $HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
-alias jj="$HOME/.cargo/bin/jj"
-jj config set --user user.name "Nick Schank"
-jj config set --user user.email "nicolas.schank@google.com"
-source <(jj util completion bash)
+$HOME/.cargo/bin/jj config set --user user.name "Nick Schank"
+$HOME/.cargo/bin/jj config set --user user.email "nicolas.schank@google.com"
+source <($HOME/.cargo/bin/jj util completion bash)
