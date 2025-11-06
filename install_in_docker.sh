@@ -31,7 +31,7 @@ done
 
 for tool in $(cat tools_to_update); do
   echo "Updating $tool..."
-  apt-get upgrade -y "$tool"
+  apt-get update -y "$tool"
 done
 
 # Safely installs a dotfile.
@@ -54,10 +54,9 @@ for file in $(ls dotfiles); do
   set_dotfile ~/."$file" "$SCRIPT_PATH/dotfiles/$file"
 done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
+set_dotfile ~/.config/jj/config.toml "$SCRIPT_PATH/configs/jj.toml"
 
 # Install JJ
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 $HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
-$HOME/.cargo/bin/jj config set --user user.name "Nick Schank"
-$HOME/.cargo/bin/jj config set --user user.email "nicolas.schank@google.com"
 source <($HOME/.cargo/bin/jj util completion bash)

@@ -1,0 +1,20 @@
+[user]
+name = "Nick Schank"
+email = "nicolas.schank@google.com"
+
+[ui]
+editor = "vim"
+diff-editor = ":builtin"
+
+[aliases]
+l = ["log", "-r", "mine()", "--no-pager", "--limit=10"]
+npr = ["bookmark", "create"]
+rmain = ["rebase", "-d", "main@origin", "--skip-emptied"]
+nmain = ["new", "main@origin"]
+fpr = ["bookmark", "forget"]
+upr = ["bookmark", "move"]
+dm = ["describe", "-m"]
+nm = ["new", "-m"]
+pull = ["git", "fetch"]
+push = ["git", "push"]
+newbase = ["new", "--insert-before=@"]
