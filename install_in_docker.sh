@@ -29,11 +29,6 @@ for tool in $(cat tools); do
   apt-get install -y --no-install-recommends "$tool"
 done
 
-for tool in $(cat tools_to_update); do
-  echo "Updating $tool..."
-  apt-get update -y "$tool"
-done
-
 # Safely installs a dotfile.
 #  $1 - Where to register the dotfile (e.g. "~/.bashrc").
 #  $2 - The location of the dotfile to use (e.g. 
