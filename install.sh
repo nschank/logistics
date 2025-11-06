@@ -51,6 +51,7 @@ for file in $(ls dotfiles); do
   set_dotfile ~/."$file" "$SCRIPT_PATH/dotfiles/$file"
 done
 set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
+mkdir -p ~/.config/jj
 set_dotfile ~/.config/jj/config.toml "$SCRIPT_PATH/configs/jj.toml"
 
 # Install JJ
