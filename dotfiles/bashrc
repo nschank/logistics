@@ -134,4 +134,3 @@ if [ -f '/home/nick/google-cloud-sdk/path.bash.inc' ]; then . '/home/nick/google
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/nick/google-cloud-sdk/completion.bash.inc' ]; then . '/home/nick/google-cloud-sdk/completion.bash.inc'; fi
 
-. "$HOME/snap/code/207/.local/share/../bin/env"
