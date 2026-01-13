@@ -123,7 +123,7 @@ if [[ -e ~/.bash_prompt && -e ~/.git_prompt.sh ]] ; then
 fi
 
 export KEEP_ENV="$(tty | rev | cut -d/ -f1-1 | rev)"
-export PATH="$PATH:/home/nschank/.scripts:/home/nschank/.local/bin:/home/nschank/.cargo/bin:/home/nick/.scripts:/home/nick/.local/bin:/home/nick/.cargo/bin"
+export PATH="$PATH:~/.scripts:~/.local/bin:~/.cargo/bin"
 . "$HOME/.cargo/env"
 
 source <(COMPLETE=bash jj)
