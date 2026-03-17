@@ -31,6 +31,8 @@ for tool in $(cat tools_to_update); do
   sudo apt-get upgrade "$tool"
 done
 
+curl -fsSL https://pyenv.run | bash
+
 # Safely installs a dotfile.
 #  $1 - Where to register the dotfile (e.g. "~/.bashrc").
 #  $2 - The location of the dotfile to use (e.g. 
