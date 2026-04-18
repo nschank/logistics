@@ -8,7 +8,7 @@ diff-editor = ":builtin"
 
 [aliases]
 l = ["log", "-r", "mine()", "--no-pager", "--limit=10"]
-npr = ["bookmark", "create"]
+npr = ["util", "exec", "--", "bash", "-c", 'name=${0%%@*}; remote=${0#*@}; [ "$remote" = "$0" ] && remote=origin; jj bookmark set nschank/$name && jj bookmark track nschank/$name --remote=$remote']
 rmain = ["rebase", "-d", "main@origin", "--skip-emptied"]
 nmain = ["new", "main@origin"]
 fpr = ["bookmark", "forget"]
