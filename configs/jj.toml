@@ -12,7 +12,7 @@ npr = ["util", "exec", "--", "bash", "-c", 'name=${0%%@*}; remote=${0#*@}; [ "$r
 rmain = ["rebase", "-d", "main@origin", "--skip-emptied"]
 nmain = ["new", "main@origin"]
 fpr = ["bookmark", "forget"]
-upr = ["bookmark", "move"]
+bs = ["bookmark", "set", "--allow-backwards"]
 dm = ["describe", "-m"]
 nm = ["new", "-m"]
 pull = ["git", "fetch"]
