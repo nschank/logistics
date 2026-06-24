@@ -137,3 +137,5 @@ if [ -f '/home/nick/google-cloud-sdk/completion.bash.inc' ]; then . '/home/nick/
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+# add Pulumi to the PATH
+export PATH=$PATH:/home/nick/.pulumi/bin
