@@ -1,0 +1,13 @@
+[Unit]
+Description=tmux server (auto-start so tmux-continuum can restore sessions)
+Documentation=https://github.com/tmux-plugins/tmux-continuum
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/tmux new-session -d
+ExecStop=/usr/bin/tmux kill-server
+KillMode=none
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

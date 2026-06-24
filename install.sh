@@ -56,6 +56,35 @@ set_dotfile ~/.scripts "$SCRIPT_PATH/scripts"
 mkdir -p ~/.config/jj
 set_dotfile ~/.config/jj/config.toml "$SCRIPT_PATH/configs/jj.toml"
 
+# Install tmux plugins (tpm + the plugins declared in dotfiles/tmux.conf) and
+# wire up a systemd user service so the tmux server auto-starts on boot. This
+# lets tmux-continuum restore session layouts and working dirs across reboots.
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [[ ! -d $TPM_DIR ]] ; then
+  echo "Cloning tpm (tmux plugin manager)..."
+  git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
+fi
+# Headless plugin install. install_plugins reads the plugin list from
+# tmux.conf and the install path from the tmux server env, so seed the env var
+# first (works even if a server is already running without tpm sourced). This
+# is idempotent: already-installed plugins are skipped.
+tmux start-server \; set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins/"
+"$TPM_DIR/bin/install_plugins"
+
+# systemd user service so the tmux server starts on boot (needed for
+# continuum-restore to fire). Guarded so machines without a systemd user
+# instance (e.g. containers) don't abort the install.
+mkdir -p ~/.config/systemd/user
+set_dotfile ~/.config/systemd/user/tmux.service "$SCRIPT_PATH/configs/tmux.service"
+if command -v systemctl >/dev/null && systemctl --user show-environment >/dev/null 2>&1 ; then
+  systemctl --user daemon-reload
+  systemctl --user enable tmux.service
+  # Start the server at boot, not just at login.
+  loginctl enable-linger "$USER" || true
+else
+  echo "No systemd user instance detected; skipping tmux.service enable."
+fi
+
 # Install JJ
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 $HOME/.cargo/bin/cargo install --locked --bin jj jj-cli
