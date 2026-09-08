@@ -137,5 +137,23 @@ if [ -f '/home/nick/google-cloud-sdk/completion.bash.inc' ]; then . '/home/nick/
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# VS Code's Python extension (ms-python.vscode-python-envs 1.36) no longer
+# reliably activates the workspace venv in new integrated terminals. Source
+# it ourselves when running inside a VS Code terminal — this also overrides
+# the pyenv shims that `pyenv init` above just put at the front of PATH.
+if [ "$TERM_PROGRAM" = "vscode" ] && [ -z "$VIRTUAL_ENV" ]; then
+  for _act in /home/nick/olympus/dist/export/python/virtualenvs/base/*/bin/activate; do
+    [ -f "$_act" ] && { . "$_act"; break; }
+  done
+  unset _act
+fi
+# Fallback: if some other tool (or a future fix) injected VIRTUAL_ENV without
+# running activate, source it so PATH wins over pyenv and `deactivate` exists.
+if [ -n "$VIRTUAL_ENV" ] && ! type deactivate >/dev/null 2>&1 && [ -f "$VIRTUAL_ENV/bin/activate" ]; then
+  . "$VIRTUAL_ENV/bin/activate"
+fi
+
 # add Pulumi to the PATH
 export PATH=$PATH:/home/nick/.pulumi/bin
+eval "$(~/.local/bin/mise activate bash)"

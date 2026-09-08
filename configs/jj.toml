@@ -6,6 +6,10 @@ email = "nicolas.schank@gmail.com"
 editor = "vim"
 diff-editor = ":builtin"
 
+[revset-aliases]
+'tip()' = 'exactly(@:: ~ (@::)-, 1)'
+'tip(x)' = 'exactly(x:: ~ (x::)-, 1)'
+
 [aliases]
 l = ["log", "-r", "mine()", "--no-pager", "--limit=10"]
 npr = ["util", "exec", "--", "bash", "-c", 'name=${0%%@*}; remote=${0#*@}; [ "$remote" = "$0" ] && remote=origin; jj bookmark set nschank/$name && jj bookmark track nschank/$name --remote=$remote']
@@ -18,3 +22,4 @@ nm = ["new", "-m"]
 pull = ["git", "fetch"]
 push = ["git", "push"]
 newbase = ["new", "--insert-before=@"]
+wu = ["workspace", "update-stale"]
