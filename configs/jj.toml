@@ -9,6 +9,10 @@ diff-editor = ":builtin"
 [revset-aliases]
 'tip()' = 'exactly(@:: ~ (@::)-, 1)'
 'tip(x)' = 'exactly(x:: ~ (x::)-, 1)'
+'all_tails()' = 'roots(~::trunk())'
+'tails()' = 'all_tails() & mine()'
+'tail(x)' = 'all_tails() & ::x'
+
 
 [aliases]
 l = ["log", "-r", "mine()", "--no-pager", "--limit=10"]
