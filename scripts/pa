@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Full gcloud logout + single fresh login (user credentials and ADC).
+#
+# `gcloud auth login` (even with --force) reuses the existing reauth session,
+# so the org session-length timer never resets. Revoking everything first
+# forces a brand-new session, so one browser trip covers the whole day.
+set -euo pipefail
+
+# Revoke and delete all logged-in accounts; tolerate "nothing to revoke".
+gcloud auth revoke --all --quiet || true
+
+# Revoke and delete application-default credentials; tolerate "not set up".
+gcloud auth application-default revoke --quiet || true
+
+exec gcloud auth login --update-adc
