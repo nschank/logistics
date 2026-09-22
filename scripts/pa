@@ -6,10 +6,19 @@
 # forces a brand-new session, so one browser trip covers the whole day.
 set -euo pipefail
 
-# Revoke and delete all logged-in accounts; tolerate "nothing to revoke".
-gcloud auth revoke --all --quiet || true
+# Revoke user accounts one by one. Skip service accounts: GCE metadata-server
+# credentials can't be revoked (and have no reauth timer anyway).
+for account in $(gcloud auth list --format='value(account)'); do
+  case "$account" in
+    *.gserviceaccount.com) ;;
+    *) gcloud auth revoke "$account" --quiet || true ;;
+  esac
+done
 
-# Revoke and delete application-default credentials; tolerate "not set up".
-gcloud auth application-default revoke --quiet || true
+# By the time this runs the ADC token is usually already expired, so
+# server-side revocation fails with "Token is not revocable" — ignore it and
+# delete the local ADC file directly.
+gcloud auth application-default revoke --quiet 2>/dev/null || true
+rm -f "${CLOUDSDK_CONFIG:-$HOME/.config/gcloud}/application_default_credentials.json"
 
 exec gcloud auth login --update-adc
